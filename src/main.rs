@@ -1,10 +1,11 @@
 extern crate clap;
+extern crate failure;
 
 use clap::{App, Arg};
 
 mod days;
 
-fn main() {
+fn main() -> Result<(), failure::Error> {
     let matches = App::new("Advent of Code 2019")
         .version("0.1.0")
         .author("Avery Harnish <averyharnish@gmail.com>")
@@ -20,5 +21,5 @@ fn main() {
 
     let day = matches.value_of("day").unwrap();
 
-    days::run(day);
+    days::run(day)
 }
