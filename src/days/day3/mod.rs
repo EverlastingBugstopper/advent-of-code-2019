@@ -1,19 +1,22 @@
-mod input;
 mod map;
 mod wire;
-use input::INPUT;
+
 use map::Map;
 use wire::direction::Direction;
 use wire::Wire;
 
-pub fn solution() -> Result<(), failure::Error> {
-    let wires = INPUT.iter().map(|x| Wire::new(x).unwrap()).collect();
-    let mut map: Map = Map::new(30000);
-    process(wires, &mut map)?;
-    Ok(())
+#[aoc_generator(day3)]
+pub fn input_generator(input: &str) -> Vec<Wire> {
+    input.lines().map(|line| Wire::new(line).unwrap()).collect()
 }
 
-fn process(wires: Vec<Wire>, map: &mut Map) -> Result<(), failure::Error> {
+#[aoc(day3, part1)]
+pub fn part_one(wires: &[Wire]) -> usize {
+    let mut map: Map = Map::new(30000);
+    process(wires, &mut map)
+}
+
+fn process(wires: &[Wire], map: &mut Map) -> usize {
     let mut intersections: Vec<(usize, usize)> = Vec::new();
     for (wire_num, wire) in wires.iter().enumerate() {
         let mut x_pointer = map.center;
@@ -80,6 +83,5 @@ fn process(wires: Vec<Wire>, map: &mut Map) -> Result<(), failure::Error> {
             closest = distance
         }
     }
-    println!("{}", closest);
-    Ok(())
+    closest
 }

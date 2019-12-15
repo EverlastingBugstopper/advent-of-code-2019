@@ -8,7 +8,7 @@ pub struct Wire {
 }
 
 impl Wire {
-    pub fn new(input: &'static str) -> Result<Wire, failure::Error> {
+    pub fn new(input: &str) -> Result<Wire, failure::Error> {
         Ok(Wire {
             path: Path::new(input)?,
         })
