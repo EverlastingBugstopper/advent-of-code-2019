@@ -4,5 +4,9 @@ edition = "2018"
 name = "advent-2019"
 version = "0.1.0"
 [dependencies]
-clap = "*"
+aoc-runner = "*"
+aoc-runner-derive = "*"
 failure = "*"
+
+[lib]
+bench = true
