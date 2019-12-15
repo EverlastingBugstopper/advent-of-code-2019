@@ -1,9 +1,9 @@
-# Advent of Code 2019
+# 🎅 Advent of Code 2019
 
-This repository contains my solutions for the [2019 Advent of Code](https://adventofcode.com/) puzzles.
+This repository contains my Rust solutions for the [2019 Advent of Code](https://adventofcode.com/).
 
 ## Usage
 
-If you have rust installed you can clone this repository and run `cargo run {day}` to get the answer given the input in that day's `input.rs`. So if I wanted to get the solution for day 2, I would run `cargo run 2`.
+My Advent of Code solutions are run and compiled with the awesome [aoc-runner](https://github.com/gobanos/cargo-aoc) crate.
 
-I might clean this up a bit and provide a way to provide an input file but for now this is just a quick bootstrap.
+If you'd like to run these solutions for yourself, you should install `cargo-aoc` with `cargo install cargo-aoc`, check out this repository, and then run `cargo aoc -day x` where `x` is the day you'd like to see the solutions for.
