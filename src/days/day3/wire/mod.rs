@@ -8,9 +8,9 @@ pub struct Wire {
 }
 
 impl Wire {
-    pub fn new(input: &str) -> Result<Wire, failure::Error> {
-        Ok(Wire {
-            path: Path::new(input)?,
-        })
+    pub fn new(input: &str) -> Wire {
+        Wire {
+            path: Path::new(input),
+        }
     }
 }

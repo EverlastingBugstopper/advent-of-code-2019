@@ -6,7 +6,7 @@ version = "0.1.0"
 [dependencies]
 aoc-runner = "*"
 aoc-runner-derive = "*"
-failure = "*"
+text_io = "0.1.7"
 
 [lib]
 bench = true

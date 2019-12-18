@@ -7,7 +7,7 @@ use wire::Wire;
 
 #[aoc_generator(day3)]
 pub fn input_generator(input: &str) -> Vec<Wire> {
-    input.lines().map(|line| Wire::new(line).unwrap()).collect()
+    input.lines().map(|line| Wire::new(line)).collect()
 }
 
 #[aoc(day3, part1)]

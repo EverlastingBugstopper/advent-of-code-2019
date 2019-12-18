@@ -5,12 +5,12 @@ pub struct Path {
 }
 
 impl Path {
-    pub fn new(input: &str) -> Result<Path, failure::Error> {
+    pub fn new(input: &str) -> Path {
         let input: Vec<&str> = input.split(",").collect();
         let mut movements: Vec<Movement> = Vec::new();
         for movement in input {
-            movements.push(Movement::new(movement)?)
+            movements.push(Movement::new(movement))
         }
-        Ok(Path { movements })
+        Path { movements }
     }
 }
