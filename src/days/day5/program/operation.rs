@@ -6,6 +6,10 @@ pub enum Operation {
     Multiply,
     Input,
     Output,
+    JumpIfTrue,
+    JumpIfFalse,
+    LessThan,
+    Equals,
     Abort,
 }
 
@@ -16,6 +20,10 @@ impl From<String> for Operation {
             "02" => Operation::Multiply,
             "03" => Operation::Input,
             "04" => Operation::Output,
+            "05" => Operation::JumpIfTrue,
+            "06" => Operation::JumpIfFalse,
+            "07" => Operation::LessThan,
+            "08" => Operation::Equals,
             "99" => Operation::Abort,
             _ => unreachable!("Unexpected opcode {}", opcode),
         }
@@ -30,6 +38,10 @@ impl Operation {
             Operation::Input => 1,
             Operation::Output => 1,
             Operation::Abort => 0,
+            Operation::JumpIfTrue => 2,
+            Operation::JumpIfFalse => 2,
+            Operation::LessThan => 3,
+            Operation::Equals => 3,
         }
     }
 }
@@ -41,6 +53,10 @@ impl fmt::Display for Operation {
             Operation::Multiply => "2",
             Operation::Input => "3",
             Operation::Output => "4",
+            Operation::JumpIfTrue => "5",
+            Operation::JumpIfFalse => "6",
+            Operation::LessThan => "7",
+            Operation::Equals => "8",
             Operation::Abort => "99",
         };
         write!(f, "{} ({:?})", x, self)

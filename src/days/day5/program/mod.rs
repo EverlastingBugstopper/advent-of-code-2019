@@ -4,7 +4,6 @@ mod parameter;
 
 use instruction::Instruction;
 use operation::Operation;
-use parameter::Parameter;
 
 pub struct Program {
     instruction_pointer: usize,
@@ -54,43 +53,93 @@ impl Program {
 
     fn cycle(&mut self) -> bool {
         let instruction = Instruction::new(self.instruction_pointer, &mut self.state);
-        self.instruction_pointer += instruction.operation.num_params() + 1;
         match instruction.operation {
-            Operation::Add => self.add(&instruction.parameters),
-            Operation::Multiply => self.multiply(&instruction.parameters),
-            Operation::Input => self.input(&instruction.parameters),
-            Operation::Output => self.output(&instruction.parameters),
-            Operation::Abort => self.abort(&instruction.parameters),
+            Operation::Add => self.add(&instruction),
+            Operation::Multiply => self.multiply(&instruction),
+            Operation::Input => self.input(&instruction),
+            Operation::Output => self.output(&instruction),
+            Operation::JumpIfTrue => self.jump_if_true(&instruction),
+            Operation::JumpIfFalse => self.jump_if_false(&instruction),
+            Operation::LessThan => self.less_than(&instruction),
+            Operation::Equals => self.equals(&instruction),
+            Operation::Abort => self.abort(),
         }
     }
 
-    fn add(&mut self, parameters: &[Parameter]) -> bool {
-        let output_position = parameters[2].value as usize;
-        self.state[output_position] =
-            parameters[0].value(&self.state) + parameters[1].value(&self.state);
+    fn add(&mut self, instruction: &Instruction) -> bool {
+        let output_position = instruction.parameters[2].value as usize;
+        self.state[output_position] = instruction.parameters[0].value(&self.state)
+            + instruction.parameters[1].value(&self.state);
+        self.instruction_pointer += instruction.operation.num_params() + 1;
         false
     }
 
-    fn multiply(&mut self, parameters: &[Parameter]) -> bool {
-        let output_position = parameters[2].value as usize;
-        self.state[output_position] =
-            parameters[0].value(&self.state) * parameters[1].value(&self.state);
+    fn multiply(&mut self, instruction: &Instruction) -> bool {
+        let output_position = instruction.parameters[2].value as usize;
+        self.state[output_position] = instruction.parameters[0].value(&self.state)
+            * instruction.parameters[1].value(&self.state);
+        self.instruction_pointer += instruction.operation.num_params() + 1;
         false
     }
 
-    fn input(&mut self, parameters: &[Parameter]) -> bool {
-        let output_position = parameters[0].value as usize;
+    fn input(&mut self, instruction: &Instruction) -> bool {
+        let output_position = instruction.parameters[0].value as usize;
         self.state[output_position] = self.input;
+        self.instruction_pointer += instruction.operation.num_params() + 1;
         false
     }
 
-    fn output(&mut self, parameters: &[Parameter]) -> bool {
-        let value = parameters[0].value(&self.state);
+    fn output(&mut self, instruction: &Instruction) -> bool {
+        let value = instruction.parameters[0].value(&self.state);
         self.output.push(value);
+        self.instruction_pointer += instruction.operation.num_params() + 1;
         false
     }
 
-    fn abort(&mut self, _: &[Parameter]) -> bool {
+    fn jump_if_false(&mut self, instruction: &Instruction) -> bool {
+        let val = instruction.parameters[0].value(&self.state);
+        match val {
+            0 => self.instruction_pointer = instruction.parameters[1].value(&self.state) as usize,
+            _ => self.instruction_pointer += instruction.operation.num_params() + 1,
+        }
+        false
+    }
+
+    fn jump_if_true(&mut self, instruction: &Instruction) -> bool {
+        match instruction.parameters[0].value(&self.state) {
+            0 => self.instruction_pointer += instruction.operation.num_params() + 1,
+            _ => self.instruction_pointer = instruction.parameters[1].value(&self.state) as usize,
+        }
+        false
+    }
+
+    fn less_than(&mut self, instruction: &Instruction) -> bool {
+        let output_position = instruction.parameters[2].value as usize;
+        if instruction.parameters[0].value(&self.state)
+            < instruction.parameters[1].value(&self.state)
+        {
+            self.state[output_position] = 1;
+        } else {
+            self.state[output_position] = 0;
+        }
+        self.instruction_pointer += instruction.operation.num_params() + 1;
+        false
+    }
+
+    fn equals(&mut self, instruction: &Instruction) -> bool {
+        let output_position = instruction.parameters[2].value as usize;
+        if instruction.parameters[0].value(&self.state)
+            == instruction.parameters[1].value(&self.state)
+        {
+            self.state[output_position] = 1;
+        } else {
+            self.state[output_position] = 0;
+        }
+        self.instruction_pointer += instruction.operation.num_params() + 1;
+        false
+    }
+
+    fn abort(&mut self) -> bool {
         true
     }
 }
