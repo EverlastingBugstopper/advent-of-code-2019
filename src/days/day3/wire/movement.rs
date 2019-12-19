@@ -8,7 +8,7 @@ pub struct Movement {
 }
 
 impl Movement {
-    pub fn new(input: &str) -> Result<Movement, failure::Error> {
+    pub fn new(input: &str) -> Movement {
         let input = input.to_string();
         let direction_input = &input[0..1];
         let direction = match direction_input {
@@ -16,13 +16,13 @@ impl Movement {
             "R" => Direction::Right,
             "U" => Direction::Up,
             "D" => Direction::Down,
-            _ => failure::bail!("invalid direction {}", direction_input),
+            _ => unreachable!("invalid direction {}", direction_input),
         };
         let distance = input[1..].parse::<usize>().unwrap();
-        Ok(Movement {
+        Movement {
             direction,
             distance,
-        })
+        }
     }
 }
 
